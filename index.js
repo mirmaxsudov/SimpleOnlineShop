@@ -1,5 +1,6 @@
 const arrOfProduts = [];
 const arrOfAddedToBasketProducts = [];
+const hell0 = [];
 
 function addNewProduct() {
 
