@@ -1,6 +1,5 @@
-const arrOfProduts = [];
+let arrOfProduts = [];
 const arrOfAddedToBasketProducts = [];
-const hell0 = [];
 
 function addNewProduct() {
 
@@ -23,6 +22,11 @@ function addNewProduct() {
         }
     }
 
+    if (category === "none") {
+        showOnScreenTag("Please select a category", false)
+        return;
+    }
+
     if (message != "-1") {
         showOnScreenTag(message, false);
         return;
@@ -40,6 +44,14 @@ function addNewProduct() {
     arrOfProduts.push(ProductObj);
     showOnScreenTag("Added new product", true);
     showAllProducts();
+    makeEmpty()
+}
+
+function makeEmpty() {
+    document.getElementById('name').value = '';
+    document.getElementById('price').value = '';
+    document.getElementById('category').value = 'none';
+    document.getElementById('link').value = '';
 }
 
 function addToBasket(id) {
@@ -54,6 +66,7 @@ function addToBasket(id) {
         product: product,
         addedTime: new Date(),
         count: 1,
+        idSidebar: crypto.randomUUID(),
     };
 
     const existingProduct = arrOfAddedToBasketProducts.find((element) => element.product.id === id);
@@ -143,15 +156,50 @@ function showOnScreenTag(message, isError = false) {
 
 function showOnSideBar() {
     const divSidebar = document.getElementById('mainSide');
-    divSidebar.innerHTML = "Hello from the sidebar<br>";
+    divSidebar.innerHTML = "<br><h1>Sidebar</h1><br>";
 
-    arrOfAddedToBasketProducts.map((element) => {
-        divSidebar.innerHTML += `<h3>Name => ${element.product.name} --- Price => ${element.product.price} --- Count => ${element.count}</h3><br>`;
+    arrOfAddedToBasketProducts.forEach((element) => {
+        divSidebar.innerHTML += `      
+        <div class="tiny-card">
+            <img src="${element.product.linkImg}" alt="404">
+            <h5>Name -> ${element.product.name}</h5>
+            <h5>Price -> For each product -> ${element.product.price}$</h5>
+            <h5>Price -> Full sum -> ${element.product.price * element.count}$ (${element.count})</h5>
+            <button onclick="removeFromBasket('${element.idSidebar}')">Remove</button>
+        </div>
+      `;
     });
 }
 
+function removeFromBasket(id) {
+    console.log(id);
+    const index = arrOfAddedToBasketProducts.findIndex(product => product.idSidebar === id);
+
+    if (index === -1) {
+        showOnScreenTag('Invalid id', false);
+        return false;
+    }
+
+    showOnScreenTag("Removed from basket", true)
+    let count = document.getElementById('tag2');
+    count.innerHTML = +count.innerHTML - arrOfAddedToBasketProducts[index].count;
+    arrOfAddedToBasketProducts.splice(index, 1);
+    showOnSideBar();
+}
+
 function sort() {
-    arrOfProduts.sort((a, b) => a.price - b.price);
-    showOnScreenTag("Sorted successfully", true);
+
+    const option = document.getElementById('categoryForSort').value;
+
+    if (option === 'none') 
+        return;
+
+    let sortedProducts = arrOfProduts.filter((element) => element.category === option);
+    let otherProducts = arrOfProduts.filter((element) => element.category !== option);
+
+    for (let i = 0; i < otherProducts.length; i++) 
+        sortedProducts.push(otherProducts[i]);
+
+    arrOfProduts = sortedProducts;
     showAllProducts();
 }
