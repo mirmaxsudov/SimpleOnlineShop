@@ -191,15 +191,36 @@ function sort() {
 
     const option = document.getElementById('categoryForSort').value;
 
-    if (option === 'none') 
+    if (option === 'none')
         return;
 
     let sortedProducts = arrOfProduts.filter((element) => element.category === option);
     let otherProducts = arrOfProduts.filter((element) => element.category !== option);
 
-    for (let i = 0; i < otherProducts.length; i++) 
+    for (let i = 0; i < otherProducts.length; i++)
         sortedProducts.push(otherProducts[i]);
 
     arrOfProduts = sortedProducts;
     showAllProducts();
+}
+
+function search() {
+    const input = document.getElementById('inSearch').value;
+    let arr1 = [];
+    let arr2 = [];
+
+    // alert(input); 
+
+    arrOfProduts.forEach(element => {
+        if (new RegExp(input, "i").test(element.name)) {
+            arr1.push(element);
+        } else {
+            arr2.push(element);
+        }
+    });
+
+    arr1 = arr1.concat(arr2);  
+
+    arrOfProduts = arr1;
+    showAllProducts();  
 }
