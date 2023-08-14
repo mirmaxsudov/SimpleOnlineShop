@@ -1,0 +1,1 @@
+document.getElementById('btn').addEventListener('dblclick', ()=> {alert('Hey')})``

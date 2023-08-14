@@ -1,0 +1,15 @@
+.clock {
+    text-align: center;
+    width: 200px;
+    height: 55px;
+    margin: auto;
+    margin-top: 18%;   
+    font-size: 45px;
+    box-shadow: 2px .3px white;
+    border: 2px solid white;
+    color: white;
+}
+
+body {
+    background-color: black;
+}
